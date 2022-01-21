@@ -6,6 +6,30 @@ known_names = []
 known_macs  = []
 known_ips   = []
 rogues      = []
+interfaces  = []
+
+ip_command = "ip neigh | grep -v FAILED"
+
+return_lines = subprocess.check_output(ip_command, shell=True).decode('utf-8').split("\n")
+for return_line in return_lines:
+    fields = return_line.split(" ")
+    if len(fields) == 6:
+        ip_addr  = fields[0]
+        device   = fields[2]
+        mac_addr = fields[4]
+        
+        if device not in interfaces:
+            interfaces.append(device)
+         
+        if mac_addr not in known_macs:
+            if mac_addr not in rogues:
+                rogues.append(mac_addr)
+        
+        # skipping IPv6 addresses for now
+        if ":" not in ip_addr:
+            if ip_addr not in known_ips:
+                if ip_addr not in rogues
+                    rogues.append(ip_addr)
 
 # ip -s link | grep ',UP,' | grep -v 'LOOPBACK'
 # could be multiple initerfaces and I don't like using the IP range to identify
@@ -17,7 +41,6 @@ ip_net = subprocess.check_output(ip_command, shell=True).decode('utf-8').strip()
 print (ip_net)
 
 return_lines = subprocess.check_output(["nmap", "-sP", ip_net]).decode('utf-8').split("\n")
-
 for return_line in return_lines:
     if return_line[0:21] == "Nmap scan report for ":
         host = return_line[21:]
@@ -27,15 +50,17 @@ for return_line in return_lines:
             hostname = host.split('(')[0].strip()
             ip_addr = host.split('(')[1].rstrip(')').strip()
             if hostname not in known_names:
-                rogues.append(hostname)
+                if hostname not in rogues:
+                    rogues.append(hostname)
             if ip_addr not in known_ips:
-                rogues.append(ip_addr)
+                if ip_addr not in rogues:
+                    rogues.append(ip_addr)
         else:
             # Nmap scan report for 192.168.1.100
             ip_addr = host.strip()
             if ip_addr not in known_ips:
-                rogues.append(ip_addr)
-
+                if ip_addr not in rogues:
+                    rogues.append(ip_addr)
 
 if len(rogues):
      print("Found Rogue Systems: ", rogues)
