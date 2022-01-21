@@ -47,10 +47,6 @@ for return_line in return_lines:
             if ip_addr not in known_ips and ip_addr not in rogues:
                 rogues.append(ip_addr)
 
-# ip -s link | grep ',UP,' | grep -v 'LOOPBACK'
-# could be multiple initerfaces and I don't like using the IP range to identify
-# also could be multiple interfaces 
-
 ip_nets = [ '127.0.0.1' ]
 for if_name in interfaces:
     ip_command = "/usr/sbin/ip a | grep scope | grep " + if_name
