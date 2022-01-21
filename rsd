@@ -83,6 +83,8 @@ for return_line in return_lines:
                 rogues.append(ip_addr)
 
 if len(rogues):
-     print("Found Rogue Systems: ", rogues)
+    print("WARNING - Found Rogue Systems: ", rogues)
+    exit(1)
 else:
-     print("No Rogue Systems")
+    print("OK - No Rogue Systems")
+    exit(0)
