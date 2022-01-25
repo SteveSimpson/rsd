@@ -1,0 +1,11 @@
+
+module nrpe_ip 1.0;
+
+require {
+	type nrpe_t;
+	type ifconfig_exec_t;
+	class file { execute getattr };
+}
+
+#============= nrpe_t ==============
+allow nrpe_t ifconfig_exec_t:file { execute getattr };
