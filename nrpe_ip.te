@@ -15,3 +15,4 @@ require {
 allow nrpe_t http_port_t:tcp_socket name_connect;
 allow nrpe_t ifconfig_exec_t:file { execute execute_no_trans getattr open read };
 allow nrpe_t traceroute_exec_t:file { execute execute_no_trans getattr open read };
+
